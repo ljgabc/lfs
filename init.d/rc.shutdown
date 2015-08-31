@@ -1,0 +1,30 @@
+#!/bin/ash
+# 
+# GPL $Id: rc.shutdown,v 1.1.1.1 2005/02/28 18:22:49 cvonk Exp $
+# system shutdown script
+
+echo "`basename $0` running .."
+
+FAIL=0
+for ii in /etc/rc.d/K* ; do
+    echo -n "Stopping ${ii#/etc/rc.d/K??} .."
+    if $ii stop 2>&1 >> /var/log/messages ; then
+        echo ""
+    else
+        echo " [FAIL]"
+        FAIL=1
+    fi
+done
+
+echo "Sending SIGTERM to all..."
+/bin/kill -s TERM -1
+sleep 1
+echo "Sending SIGKILL to all..."
+/bin/kill -s KILL -1
+
+echo "Umounting everything..."
+/bin/umount -a -r
+/bin/mount -o remount,ro /
+
+return $FAIL
+# 

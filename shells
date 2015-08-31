@@ -1,0 +1,5 @@
+# GPL $Id: shells,v 1.1.1.1 2005/02/28 18:22:49 cvonk Exp $
+# pathnames of valid login shells
+#
+/bin/ash
+/bin/false
