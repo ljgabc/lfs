@@ -1,0 +1,24 @@
+#!/bin/ash
+
+# GPL $Id: dropbear,v 1.2 2005/03/22 15:06:14 cvonk Exp $
+# system init for SSH server (dropbear)
+
+case "$1" in
+    start)
+        dropbear -R
+        ;;
+    stop)
+        killall dropbear 2>/dev/null
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+    status)
+        if pidof dropbear | sed "s/$$\$//" | grep -q [0-9] ; then
+        echo "running"
+        else
+        echo "stopped"
+        fi
+        ;;
+esac

@@ -1,0 +1,29 @@
+# GPL $Id: inittab,v 1.1.1.1 2005/02/28 18:22:49 cvonk Exp $
+# sysv-compatible init table
+#
+
+# system init scripts
+::sysinit:/etc/init.d/rc.sysinit
+
+# Stuff to do before rebooting
+::ctrlaltdel:/sbin/reboot
+::shutdown:/etc/init.d/rc.shutdown
+
+# Stuff to do when restarting the init process
+::restart:/sbin/init
+
+# Start an "askfirst" shell on /dev/tty1-4
+tty1::askfirst:/bin/login
+tty2::askfirst:/bin/login
+tty3::askfirst:/bin/login
+tty4::askfirst:/bin/login
+
+# /sbin/getty invocations for selected ttys
+tty4::respawn:/sbin/getty 38400 tty5
+tty5::respawn:/sbin/getty 38400 tty6
+
+# Put a getty on a serial line (for a terminal)
+::askfirst:/sbin/getty -L ttymxc0 115200 vt100
+
+# Example how to put a getty on a modem line.
+#::respawn:/sbin/getty 57600 ttyS2 

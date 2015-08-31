@@ -1,0 +1,7 @@
+# GPL $Id: hosts,v 1.1.1.1 2005/02/28 18:22:49 cvonk Exp $
+# static table loopup for host names
+#
+# resolv.conf points to the local resolver (dnsmasq), that in turn serves the
+# host names listed in /etc/sysconfig/dnsmasq/hosts
+#
+127.0.0.1   localhost localhost.localdomain

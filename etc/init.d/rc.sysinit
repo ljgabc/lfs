@@ -1,0 +1,33 @@
+#!/bin/ash
+# 
+# GPL $Id: rc.sysinit,v 1.2 2005/10/09 16:39:05 cvonk Exp $
+# system init script
+
+# dump the kernel ring buffer so we can examine it later
+dmesg > /var/log/messages
+
+echo "`basename $0` running .."
+( mkdir -p /dev/pts
+  mount -a
+  echo /sbin/mdev > /proc/sys/kernel/hotplug
+  mdev -s ) 2>&1 2> /dev/null >> /var/log/messages
+
+# start the subsystems
+FAIL=0
+for ii in /etc/rc.d/S* ; do
+    SERVICENAME=${ii#/etc/rc.d/S??}
+    if [ $SERVICENAME != "progress" ] ; then
+        echo -n "Starting $SERVICENAME .."
+        if $ii start ; then
+            echo " [SUCCESS]"
+        else
+            echo " [FAIL]"
+            FAIL=1
+        fi
+    else
+        $ii start
+    fi
+done
+
+exit $FAIL
+
