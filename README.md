@@ -55,3 +55,14 @@ make INSTALL_PREFIX=${TARGETFS} install
 make sftp-server
 cp sftp-server ${TARGETFS}/usr/libexec/
 ```
+
+6. Python-2.7.3
+
+```
+./configure && make python Parser/pgen && mv python hostpython && mv Parser/pgen Parser/hostpgen && make distclean
+patch -p1 < Python-2.7.3-xcompile.patch
+
+./configure --host=${TARGET} --build=${BUILD} --prefix=/usr PYTHON_XCOMPILE_DEPENDENCIES_PREFIX=${TARGETFS}/usr --enable-shared
+make HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="${TARGET}-gcc -shared" CROSS_COMPILE=${TARGET}- CROSS_COMPILE_TARGET=yes HOSTARCH=${TARGET} BUILDARCH=${BUILD} PYTHON_XCOMPILE_DEPENDENCIES_PREFIX="${TARGETFS}/usr"
+make HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="${TARGET}-gcc -shared" CROSS_COMPILE=${TARGET}- CROSS_COMPILE_TARGET=yes HOSTARCH=${TARGET} BUILDARCH=${BUILD} PYTHON_XCOMPILE_DEPENDENCIES_PREFIX="${TARGETFS}/usr" DESTDIR=${TARGETFS} install
+```
